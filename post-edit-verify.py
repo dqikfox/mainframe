@@ -25,7 +25,7 @@ import subprocess
 from pathlib import Path
 from datetime import datetime
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(r"C:\Users\KING\Projects\mainframe")
 LOG = Path(r"C:\Users\KING\AppData\Local\hermes\audit\post-edit.log")
 LOG.parent.mkdir(parents=True, exist_ok=True)
 
@@ -40,8 +40,9 @@ def log(line: str) -> None:
 
 def run_pytest() -> tuple[bool, str]:
     t0 = time.perf_counter()
+    tests_dir = ROOT / "tests"
     r = subprocess.run(
-        [sys.executable, "-m", "pytest", "tests/", "--tb=short", "-q"],
+        [sys.executable, "-m", "pytest", str(tests_dir), "--tb=short", "-q"],
         cwd=str(ROOT), capture_output=True, text=True, timeout=300,
     )
     dt = time.perf_counter() - t0
@@ -54,8 +55,9 @@ def run_pytest() -> tuple[bool, str]:
 
 def run_verify() -> tuple[bool, str]:
     t0 = time.perf_counter()
+    verify_path = ROOT / "verify.py"
     r = subprocess.run(
-        [sys.executable, "verify.py", "--quick"],
+        [sys.executable, str(verify_path), "--quick"],
         cwd=str(ROOT), capture_output=True, text=True, timeout=120,
     )
     dt = time.perf_counter() - t0
